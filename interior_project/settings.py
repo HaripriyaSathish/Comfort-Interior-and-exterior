@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import dj_database_url
 
 # ------------------------------------------------------------------
 # BASE
@@ -11,7 +12,17 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
+
+# ------------------------------------------------------------------
+# HOSTS (local + Render)
+# ------------------------------------------------------------------
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+CSRF_TRUSTED_ORIGINS = []
+
+RENDER_EXTERNAL_HOSTNAME = os.getenv('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_EXTERNAL_HOSTNAME}')
 
 
 # ------------------------------------------------------------------
@@ -35,6 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -69,22 +81,33 @@ TEMPLATES = [
 
 
 # ------------------------------------------------------------------
-# DATABASE (MySQL Workbench)
+# DATABASE — Neon on Render, MySQL Workbench locally
 # ------------------------------------------------------------------
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '3306'),
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
+DATABASE_URL = os.getenv('DATABASE_URL')
+
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=True,
+        )
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv('DB_NAME'),
+            'USER': os.getenv('DB_USER'),
+            'PASSWORD': os.getenv('DB_PASSWORD'),
+            'HOST': os.getenv('DB_HOST', 'localhost'),
+            'PORT': os.getenv('DB_PORT', '3306'),
+            'OPTIONS': {
+                'charset': 'utf8mb4',
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            },
+        }
+    }
 
 
 # ------------------------------------------------------------------
@@ -108,7 +131,7 @@ USE_TZ = True
 
 
 # ------------------------------------------------------------------
-# STATIC FILES (CSS, JS, icons)
+# STATIC FILES (CSS, JS, icons) — served by WhiteNoise
 # ------------------------------------------------------------------
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
@@ -129,7 +152,7 @@ STORAGES = {
         'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
     },
     'staticfiles': {
-        'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
     },
 }
 
@@ -140,6 +163,15 @@ MEDIA_URL = '/media/'
 # EMAIL (SMTP credentials are managed in the admin panel, not .env)
 # ------------------------------------------------------------------
 EMAIL_BACKEND = 'core.email_backend.DatabaseEmailBackend'
+
+
+# ------------------------------------------------------------------
+# PRODUCTION SECURITY
+# ------------------------------------------------------------------
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 
 # ------------------------------------------------------------------
