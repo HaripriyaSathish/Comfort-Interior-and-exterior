@@ -1,0 +1,545 @@
+{% load static text_format images %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>document.documentElement.classList.add('js');</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  {# ---------------- SEO (Website Settings) ---------------- #}
+  <title>{{ site.meta_title }}</title>
+  <meta name="description" content="{{ site.meta_description }}">
+  {% if site.meta_keywords %}<meta name="keywords" content="{{ site.meta_keywords }}">{% endif %}
+  {% if site.meta_author %}<meta name="author" content="{{ site.meta_author }}">{% endif %}
+  <meta name="robots" content="{% if site.allow_search_engines %}index, follow{% else %}noindex, nofollow{% endif %}">
+  {% if site.canonical_url %}<link rel="canonical" href="{{ site.canonical_url }}">{% endif %}
+  {% if site.google_site_verification %}<meta name="google-site-verification" content="{{ site.google_site_verification }}">{% endif %}
+
+  {# Social sharing preview #}
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ site.site_name }}">
+  <meta property="og:title" content="{{ site.share_title }}">
+  <meta property="og:description" content="{{ site.share_description }}">
+  {% if site.canonical_url %}<meta property="og:url" content="{{ site.canonical_url }}">{% endif %}
+  {% if site.og_image %}
+    <meta property="og:image" content="{{ site.og_image|cld:'w_1200,h_630,c_fill' }}">
+  {% elif hero.background_image %}
+    <meta property="og:image" content="{{ hero.background_image|cld:'w_1200,h_630,c_fill' }}">
+  {% endif %}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ site.share_title }}">
+  <meta name="twitter:description" content="{{ site.share_description }}">
+
+  {# Favicon = logo #}
+  {% if site.logo %}
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ site.logo|cld_icon:32 }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ site.logo|cld_icon:96 }}">
+    <link rel="apple-touch-icon" href="{{ site.logo|cld:'w_180,h_180,c_fill,g_center' }}">
+  {% endif %}
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  {% if hero.background_image %}<link rel="preload" as="image" href="{{ hero.background_image|cld:'w_1920' }}">{% endif %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+  {% if site.google_analytics_id %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics_id }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ site.google_analytics_id|escapejs }}');
+    </script>
+  {% endif %}
+</head>
+<body>
+
+{# ================================================================ NAVBAR #}
+<header class="site-header" id="siteHeader">
+  <div class="container header-inner">
+    <a href="#home" class="brand" aria-label="{{ site.site_name }} — home">
+      {% if site.logo %}
+        <img src="{{ site.logo|cld:'w_120,h_120,c_fill,g_center' }}" alt="{{ site.site_name }} logo" class="brand-logo">
+      {% else %}
+        <span class="brand-mark">{{ site.site_name|first }}</span>
+      {% endif %}
+      <span class="brand-name">{{ site.site_name }}</span>
+    </a>
+
+    <nav class="main-nav" id="mainNav" aria-label="Main">
+      <ul>
+        {% for item in nav_items %}
+          <li><a href="{{ item.anchor }}" data-nav="{{ item.section }}">{{ item.label }}</a></li>
+        {% endfor %}
+      </ul>
+      <a href="#contact" class="btn btn-gold nav-cta-mobile">{{ site.nav_button_text }}</a>
+    </nav>
+
+    <a href="#contact" class="btn btn-gold nav-cta">{{ site.nav_button_text }}</a>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+
+{# ================================================================ HERO #}
+<section class="hero" id="home">
+  <div class="hero-bg"{% if hero.background_image %} style="background-image:url('{{ hero.background_image|cld:'w_1920' }}')"{% endif %}></div>
+  <div class="hero-overlay"></div>
+  <div class="container hero-content">
+    <p class="eyebrow">{{ hero.tagline }}</p>
+    <h1 class="hero-title">{{ hero.heading }}</h1>
+    <p class="hero-text">{{ hero.description }}</p>
+    <div class="btn-row">
+      <a href="#interior" class="btn btn-gold">{{ hero.primary_button_text }} <svg class="arrow" viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M6.5 1.5 11 6l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a href="#contact" class="btn btn-outline-light">{{ hero.secondary_button_text }}</a>
+    </div>
+  </div>
+</section>
+
+{# ================================================================ ABOUT #}
+<section class="about" id="about">
+  <div class="about-wrap">
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p class="eyebrow">{{ about.section_label }}</p>
+      {% if about.intro %}<p class="about-intro">{{ about.intro|highlight }}</p>{% endif %}
+      <div class="rich">{{ about.content|rich_text }}</div>
+      <div class="rich about-closing">{{ about.closing_text|rich_text }}</div>
+
+      {% if about.vision_text %}
+        <h3 class="vision-title">{{ about.vision_title }}</h3>
+        <p class="vision-text">{{ about.vision_text|highlight }}</p>
+      {% endif %}
+
+      {% if about_work_types %}
+        <div class="work-types">
+          {% for w in about_work_types %}
+            {% if w.section %}<a href="#{{ w.section }}" class="work-type">{% else %}<div class="work-type">{% endif %}
+              <span class="work-type-title">{{ w.title }}</span>
+              <span class="work-type-sub">{{ w.subtitle }}</span>
+            {% if w.section %}</a>{% else %}</div>{% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="about-media reveal">
+      <div class="about-frame"></div>
+      <div class="about-img zoom-img">
+        {% if about.image %}
+          <img src="{{ about.image|cld:'w_900' }}" alt="{{ site.site_name }} design materials" loading="lazy">
+        {% else %}
+          <div class="img-placeholder"></div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% if about_promises %}
+    <div class="promise reveal">
+      <h3 class="promise-title">{{ about.promise_title }}</h3>
+      <p class="promise-list">{% for p in about_promises %}{{ p.text }}{% if not forloop.last %} <span class="dot">&bull;</span> {% endif %}{% endfor %}</p>
+    </div>
+  {% endif %}
+  </div>
+</section>
+
+{# ================================================================ INTERIOR WORKS #}
+<section class="works bg-cream" id="interior">
+  <div class="works-head reveal">
+    <p class="eyebrow">{{ interior.section_label }}</p>
+    <h2 class="section-title">{{ interior.heading }}</h2>
+    {% if interior.description %}<p class="section-text">{{ interior.description }}</p>{% endif %}
+  </div>
+  <div>
+    <div class="works-grid">
+      {% for s in interior_services %}
+        <article class="service-card reveal">
+          <div class="service-img zoom-img">
+            {% if s.image %}<img src="{{ s.image|cld:'w_700' }}" alt="{{ s.title }}" loading="lazy">{% else %}<div class="img-placeholder"></div>{% endif %}
+          </div>
+          <div class="service-body">
+            <h3 class="card-title">{{ s.title }}</h3>
+            <p>{{ s.description }}</p>
+            <a href="#contact" class="enquire-link" data-service="{{ s.title }}"><span>{{ interior.enquire_button_text }}</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ================================================================ INTERIOR PROJECTS GALLERY #}
+{% if interior_projects %}
+<section class="showcase" id="interior-projects">
+  <div class="showcase-wrap">
+    <div class="showcase-head reveal">
+      <p class="eyebrow">{{ interior_gallery.section_label }}</p>
+      <h2 class="section-title">{{ interior_gallery.heading }}</h2>
+      {% if interior_gallery.description %}<p class="section-text">{{ interior_gallery.description }}</p>{% endif %}
+    </div>
+
+    <div class="mosaic">
+      {% for p in interior_projects %}
+        <figure class="mosaic-item zoom-img size-{{ p.size }} reveal"{% if p.image %} data-lightbox-src="{{ p.image|cld:'w_1800' }}" data-lightbox-caption="{{ p.title }}" tabindex="0" role="button" aria-label="View {{ p.title }}"{% endif %}>
+          {% if p.image %}<img src="{{ p.image|cld:'w_1200' }}" alt="{{ p.title }}" loading="lazy">{% else %}<div class="img-placeholder"></div>{% endif %}
+          <figcaption>
+            <span class="mosaic-num">{{ forloop.counter|stringformat:"02d" }}</span>
+            <span class="mosaic-title">{{ p.title }}</span>
+          </figcaption>
+        </figure>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ================================================================ EXTERIOR & COMMERCIAL #}
+<section class="ext" id="exterior">
+  <div class="works-head reveal">
+    <p class="eyebrow">{{ exterior.section_label }}</p>
+    <h2 class="section-title">{{ exterior.heading }}</h2>
+    {% if exterior.description %}<p class="section-text">{{ exterior.description }}</p>{% endif %}
+  </div>
+  <div>
+    <div class="ext-grid">
+      {% for s in exterior_services %}
+        <article class="service-card reveal">
+          <div class="service-img zoom-img">
+            {% if s.image %}<img src="{{ s.image|cld:'w_900' }}" alt="{{ s.title }}" loading="lazy">{% else %}<div class="img-placeholder"></div>{% endif %}
+          </div>
+          <div class="service-body">
+            <h3 class="card-title">{{ s.title }}</h3>
+            <p>{{ s.description }}</p>
+            <a href="#contact" class="enquire-link" data-service="{{ s.title }}"><span>{{ exterior.enquire_button_text }}</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ================================================================ WHY CHOOSE US #}
+{% if why_choose_items %}
+<section class="why" id="why-us">
+  <div class="wrap-1280">
+    <div class="section-head center reveal">
+      <p class="eyebrow">{{ why_choose.section_label }}</p>
+      <h2 class="section-title">{{ why_choose.heading }}</h2>
+    </div>
+    <div class="why-grid reveal">
+      {% for item in why_choose_items %}
+        <div class="why-card">
+          <span class="why-num">{{ forloop.counter|stringformat:"02d" }}</span>
+          <h3 class="card-title">{{ item.title }}</h3>
+          <p>{{ item.description }}</p>
+          <span class="why-line"></span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ================================================================ PROCESS #}
+{% if process_steps %}
+<section class="bg-teal process" id="process">
+  <div class="wrap-1280">
+    <div class="section-head reveal">
+      <p class="eyebrow">{{ process.section_label }}</p>
+      <h2 class="section-title light">{{ process.heading }}</h2>
+    </div>
+    <ol class="steps reveal" style="--steps: {{ process_steps|length }}">
+      {% for step in process_steps %}
+        <li class="step">
+          <span class="step-num">{{ forloop.counter|stringformat:"02d" }}</span>
+          <h3 class="step-title">{{ step.title }}</h3>
+          <p>{{ step.description }}</p>
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+{% endif %}
+
+{# ================================================================ PORTFOLIO #}
+<section class="portfolio" id="projects">
+  <div>
+    <div class="portfolio-head section-head split reveal">
+      <div>
+        <p class="eyebrow">{{ portfolio.section_label }}</p>
+        <h2 class="section-title">{{ portfolio.heading }}</h2>
+      </div>
+      <div class="filters" role="tablist" aria-label="Filter projects">
+        <button class="filter-btn is-active" data-filter="all" role="tab" aria-selected="true">{{ portfolio.all_filter_text }}</button>
+        {% for c in portfolio_categories %}
+          <button class="filter-btn" data-filter="{{ c.slug }}" role="tab" aria-selected="false">{{ c.name }}</button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="portfolio-grid" id="portfolioGrid">
+      {% for p in portfolio_projects %}
+        <article class="project-card reveal" data-category="{{ p.category.slug }}">
+          <div class="project-img zoom-img">
+            {% if p.image %}<img src="{{ p.image|cld:'w_900' }}" alt="{{ p.title }}" loading="lazy">{% else %}<div class="img-placeholder"></div>{% endif %}
+          </div>
+          <div class="project-body">
+            <div>
+              <p class="project-cat">{{ p.category.name }}</p>
+              <h3 class="card-title">{{ p.title }}</h3>
+              {% if p.subtitle %}<p class="project-sub">{{ p.subtitle }}</p>{% endif %}
+            </div>
+            {% if p.image or p.images.all %}
+              <button class="project-open" type="button" aria-label="View photos of {{ p.title }}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            {% endif %}
+          </div>
+          <div class="gallery-src" hidden>
+            {% if p.image %}<span data-src="{{ p.image|cld:'w_1800' }}" data-caption="{{ p.title }}"></span>{% endif %}
+            {% for img in p.images.all %}<span data-src="{{ img.image|cld:'w_1800' }}" data-caption="{{ img.caption|default:p.title }}"></span>{% endfor %}
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+    <p class="empty-msg" id="portfolioEmpty" hidden>New projects coming soon.</p>
+  </div>
+</section>
+
+{# ================================================================ TESTIMONIALS #}
+{% if testimonials %}
+<section class="testimonials" id="testimonials">
+  <div class="wrap-1280">
+    <div class="section-head center reveal">
+      <p class="eyebrow">{{ testimonial_section.section_label }}</p>
+      <h2 class="section-title">{{ testimonial_section.heading }}</h2>
+    </div>
+    <div class="testimonial-grid">
+      {% for t in testimonials %}
+        <figure class="testimonial reveal">
+          <svg class="quote-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M4 6h10v10c0 6-3 10-9 11l-.8-3.2C8 22.8 9.6 20.4 9.8 17H4V6zm14 0h10v10c0 6-3 10-9 11l-.8-3.2c3.8-1 5.4-3.4 5.6-6.8H18V6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          <blockquote>&ldquo;{{ t.quote }}&rdquo;</blockquote>
+          <figcaption>
+            <strong>{{ t.client_name }}</strong>
+            {% if t.project_type %}<span>{{ t.project_type }}</span>{% endif %}
+          </figcaption>
+        </figure>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ================================================================ CTA BANNER #}
+<section class="cta" id="start">
+  <div class="cta-bg"{% if cta.background_image %} style="background-image:url('{{ cta.background_image|cld:'w_1920' }}')"{% endif %}></div>
+  <div class="cta-overlay"></div>
+  <div class="container cta-content reveal">
+    <p class="eyebrow">{{ cta.section_label }}</p>
+    <h2 class="cta-title">{{ cta.heading }}</h2>
+    <div class="btn-row center">
+      <a href="#contact" class="btn btn-gold">{{ cta.primary_button_text }}</a>
+      <a href="#contact" class="btn btn-outline-light">{{ cta.secondary_button_text }}</a>
+    </div>
+  </div>
+</section>
+
+{# ================================================================ CONTACT #}
+<section class="contact" id="contact">
+  <div class="wrap-1280 contact-grid">
+    <div class="contact-info reveal">
+      <p class="eyebrow">{{ contact.section_label }}</p>
+      <h2 class="section-title">{{ contact.heading }}</h2>
+      <p class="section-text">{{ contact.description }}</p>
+
+      <ul class="info-list">
+        {% if contact.address %}
+          <li>
+            <span class="info-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
+            <div><small>Address</small><a href="{{ contact.map_url }}" target="_blank" rel="noopener">{{ contact.address|linebreaksbr }}</a></div>
+          </li>
+        {% endif %}
+        {% if contact.phone_list %}
+          <li>
+            <span class="info-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.8 2z"/></svg></span>
+            <div><small>Phone</small><span>{% for display, tel in contact.phone_list %}<a href="tel:{{ tel }}">{{ display }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</span></div>
+          </li>
+        {% endif %}
+        {% if contact.email %}
+          <li>
+            <span class="info-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
+            <div><small>Email</small><a href="mailto:{{ contact.email }}">{{ contact.email }}</a></div>
+          </li>
+        {% endif %}
+        {% if contact.instagram_handle %}
+          <li>
+            <span class="info-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg></span>
+            <div><small>Instagram</small><a href="{{ contact.instagram_url }}" target="_blank" rel="noopener">{{ contact.instagram_handle }}</a></div>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+
+    <div class="form-card reveal">
+      {% if messages %}
+        {% for m in messages %}<div class="form-alert {{ m.tags }}">{{ m }}</div>{% endfor %}
+      {% endif %}
+      <div class="form-alert" id="formAlert" hidden role="status" aria-live="polite"></div>
+
+      <form class="enquiry-form" id="enquiryForm" method="post" action="{% url 'submit_enquiry' %}" novalidate>
+        {% csrf_token %}
+        <div class="form-row two">
+          <div class="field">
+            <label class="sr-only" for="{{ enquiry_form.name.id_for_label }}">Name</label>
+            {{ enquiry_form.name }}
+            <small class="field-error" data-error-for="name">{{ enquiry_form.name.errors.0 }}</small>
+          </div>
+          <div class="field">
+            <label class="sr-only" for="{{ enquiry_form.phone.id_for_label }}">Phone</label>
+            {{ enquiry_form.phone }}
+            <small class="field-error" data-error-for="phone">{{ enquiry_form.phone.errors.0 }}</small>
+          </div>
+        </div>
+        <div class="field">
+          <label class="sr-only" for="{{ enquiry_form.email.id_for_label }}">Email</label>
+          {{ enquiry_form.email }}
+          <small class="field-error" data-error-for="email">{{ enquiry_form.email.errors.0 }}</small>
+        </div>
+        <div class="field">
+          <label class="sr-only" for="{{ enquiry_form.service.id_for_label }}">Service required</label>
+          {{ enquiry_form.service }}
+          <small class="field-error" data-error-for="service">{{ enquiry_form.service.errors.0 }}</small>
+        </div>
+        <div class="field">
+          <label class="sr-only" for="{{ enquiry_form.message.id_for_label }}">Message</label>
+          {{ enquiry_form.message }}
+          <small class="char-count" id="messageCount" aria-hidden="true"></small>
+          <small class="field-error" data-error-for="message">{{ enquiry_form.message.errors.0 }}</small>
+        </div>
+        <div class="hp-field" aria-hidden="true">
+          <label for="{{ enquiry_form.website.id_for_label }}">Leave this empty</label>
+          {{ enquiry_form.website }}
+        </div>
+        <button type="submit" class="btn btn-teal btn-block" id="enquirySubmit">
+          <span class="btn-label">{{ contact.form_button_text }}</span>
+          <span class="spinner" aria-hidden="true"></span>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+{# ================================================================ FOOTER #}
+<footer class="site-footer">
+  <div class="wrap-1280 footer-grid">
+    <div class="footer-brand">
+      <a href="#home" class="brand light">
+        {% if footer.footer_logo %}
+          <img src="{{ footer.footer_logo|cld:'w_140,h_140,c_fill,g_center' }}" alt="{{ site.site_name }} logo" class="brand-logo">
+        {% elif site.logo %}
+          <img src="{{ site.logo|cld:'w_140,h_140,c_fill,g_center' }}" alt="{{ site.site_name }} logo" class="brand-logo">
+        {% else %}
+          <span class="brand-mark">{{ site.site_name|first }}</span>
+        {% endif %}
+        <span class="brand-name">{{ site.site_name }}</span>
+      </a>
+      <p class="footer-about">{{ footer.about_text }}</p>
+      {% if footer_social_links %}
+        <p class="footer-follow">{{ footer.follow_text }}</p>
+        <div class="socials">
+          {% for s in footer_social_links %}
+            <a href="{{ s.url }}" target="_blank" rel="noopener" aria-label="{{ s.get_platform_display }}">
+              {% include "partials/social_icon.html" with platform=s.platform %}
+            </a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="footer-col">
+      <h4>{{ footer.quick_links_title }}</h4>
+      <ul>{% for item in nav_items %}<li><a href="{{ item.anchor }}">{{ item.label }}</a></li>{% endfor %}</ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>{{ footer.interior_title }}</h4>
+      <ul>{% for s in interior_services %}<li><a href="#interior">{{ s.title }}</a></li>{% endfor %}</ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>{{ footer.exterior_title }}</h4>
+      <ul>{% for s in exterior_services %}<li><a href="#exterior">{{ s.title }}</a></li>{% endfor %}</ul>
+    </div>
+
+    <div class="footer-col footer-contact">
+      <h4>{{ footer.contact_title }}</h4>
+      <ul>
+        {% if contact.address %}
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg>
+            <a href="{{ contact.map_url }}" target="_blank" rel="noopener">{{ contact.address|linebreaksbr }}</a></li>
+        {% endif %}
+        {% if contact.phone_list %}
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.8 2z"/></svg>
+            <span>{% for display, tel in contact.phone_list %}<a href="tel:{{ tel }}">{{ display }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</span></li>
+        {% endif %}
+        {% if contact.email %}
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            <a href="mailto:{{ contact.email }}" class="footer-email">{{ contact.email }}</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="wrap-1280 footer-bottom-inner">
+      <p>&copy; {% now "Y" %} {{ site.site_name }}. {{ footer.copyright_text }}</p>
+      {% if footer.credit_name %}
+        <p class="footer-credit">{{ footer.credit_prefix }}
+          {% if footer.credit_url %}<a href="{{ footer.credit_url }}" target="_blank" rel="noopener">{{ footer.credit_name }}</a>{% else %}{{ footer.credit_name }}{% endif %}
+        </p>
+      {% endif %}
+    </div>
+  </div>
+</footer>
+
+{# ================================================================ FLOATING CONTACT BUTTONS #}
+{% if floating.show_call or floating.show_whatsapp or floating.show_instagram %}
+<div class="float-actions" id="floatActions" aria-label="Quick contact">
+  {% if floating.show_whatsapp and floating.whatsapp_link %}
+    <a href="{{ floating.whatsapp_link }}" class="float-btn float-whatsapp" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2a9.9 9.9 0 0 0-8.5 14.98L2 22l5.17-1.5A9.9 9.9 0 1 0 12.04 2Zm0 18.1a8.2 8.2 0 0 1-4.2-1.15l-.3-.18-3.07.9.92-2.99-.2-.31A8.2 8.2 0 1 1 12.04 20.1Zm4.5-6.14c-.25-.12-1.46-.72-1.69-.8-.23-.08-.39-.12-.55.12-.16.25-.63.8-.78.97-.14.16-.29.18-.53.06a6.7 6.7 0 0 1-3.3-2.89c-.25-.43.25-.4.71-1.32.08-.16.04-.3-.02-.42-.06-.12-.55-1.33-.76-1.82-.2-.48-.4-.41-.55-.42h-.47a.9.9 0 0 0-.65.3 2.74 2.74 0 0 0-.86 2.04 4.76 4.76 0 0 0 1 2.53 10.9 10.9 0 0 0 4.17 3.68c1.55.67 2.16.73 2.94.61.47-.07 1.46-.6 1.66-1.17.2-.58.2-1.07.15-1.17-.06-.1-.22-.16-.47-.28Z"/></svg>
+    </a>
+  {% endif %}
+  {% if floating.show_call and floating.tel_link %}
+    <a href="{{ floating.tel_link }}" class="float-btn float-call" aria-label="Call us">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.8 2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  {% endif %}
+  {% if floating.show_instagram and floating.instagram_url %}
+    <a href="{{ floating.instagram_url }}" class="float-btn float-instagram" target="_blank" rel="noopener" aria-label="Follow us on Instagram">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor"/></svg>
+    </a>
+  {% endif %}
+</div>
+{% endif %}
+
+{# ================================================================ LIGHTBOX #}
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="lb-close" type="button" aria-label="Close">&times;</button>
+  <button class="lb-prev" type="button" aria-label="Previous image">&#8249;</button>
+  <figure>
+    <img alt="" id="lbImage">
+    <figcaption id="lbCaption"></figcaption>
+  </figure>
+  <button class="lb-next" type="button" aria-label="Next image">&#8250;</button>
+  <span class="lb-count" id="lbCount"></span>
+</div>
+
+<script src="{% static 'js/main.js' %}" defer></script>
+</body>
+</html>
