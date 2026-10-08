@@ -1,0 +1,873 @@
+[
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$TW0GukpCD4zU6IJBsJZR4U$t+J8aPsxXw6sIXXfUD7e7u/inN3NzMdlZwIuEHXQfmQ=",
+    "last_login": "2026-10-08T11:32:55.918Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "priyarajendren2303@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-10-08T09:55:15.008Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "core.sitesettings",
+  "pk": 1,
+  "fields": {
+    "site_name": "Classic Comfort Interior and Exterior",
+    "logo": "media/site/image_vppuw4",
+    "nav_button_text": "Get a Quote",
+    "meta_title": "Classic Comfort Interior and Exterior | Interior, Exterior & Commercial Design",
+    "meta_description": "From bespoke kitchens and wardrobes to striking facades and commercial fit-outs, Classic Comfort designs and builds every detail, end to end.",
+    "meta_keywords": "interior design, exterior design, commercial interiors, modular kitchen, wardrobes, facade design, home renovation",
+    "meta_author": "Classic Comfort Interior and Exterior",
+    "canonical_url": "",
+    "allow_search_engines": true,
+    "og_title": "",
+    "og_description": "",
+    "og_image": "",
+    "google_site_verification": "",
+    "google_analytics_id": ""
+  }
+},
+{
+  "model": "core.navmenuitem",
+  "pk": 1,
+  "fields": {
+    "display_order": 1,
+    "is_active": true,
+    "label": "Home",
+    "section": "home"
+  }
+},
+{
+  "model": "core.navmenuitem",
+  "pk": 2,
+  "fields": {
+    "display_order": 3,
+    "is_active": true,
+    "label": "Interior",
+    "section": "interior"
+  }
+},
+{
+  "model": "core.navmenuitem",
+  "pk": 3,
+  "fields": {
+    "display_order": 4,
+    "is_active": true,
+    "label": "Exterior",
+    "section": "exterior"
+  }
+},
+{
+  "model": "core.navmenuitem",
+  "pk": 4,
+  "fields": {
+    "display_order": 5,
+    "is_active": true,
+    "label": "Projects",
+    "section": "projects"
+  }
+},
+{
+  "model": "core.navmenuitem",
+  "pk": 5,
+  "fields": {
+    "display_order": 2,
+    "is_active": true,
+    "label": "About",
+    "section": "about"
+  }
+},
+{
+  "model": "core.navmenuitem",
+  "pk": 6,
+  "fields": {
+    "display_order": 6,
+    "is_active": true,
+    "label": "Contact",
+    "section": "contact"
+  }
+},
+{
+  "model": "core.herosection",
+  "pk": 1,
+  "fields": {
+    "tagline": "Interior • Exterior • Commercial",
+    "heading": "Crafting Spaces That Feel Like Home",
+    "description": "From bespoke kitchens and wardrobes to striking facades and commercial fit-outs — we design and build every detail, end to end.",
+    "background_image": "media/hero/Image_Luxury_living_room_interior_with_teal_sofa_and_gold_accents_anyiwq",
+    "primary_button_text": "Explore Our Work",
+    "secondary_button_text": "Get a Quote"
+  }
+},
+{
+  "model": "core.aboutsection",
+  "pk": 1,
+  "fields": {
+    "section_label": "About Us",
+    "intro": "At *Classic Comfort Interior and Exterior*, we believe every space has a story to tell.",
+    "content": "We are a passionate interior and exterior design company dedicated to transforming houses, offices, and commercial spaces into beautiful, functional, and comfortable environments. From concept to completion, we focus on understanding our clients’ needs, lifestyle, and vision to create spaces that truly feel like their own.\r\n\r\nOur expertise includes *Modular Kitchens, Bedroom Interiors, Living Room Interiors, Residential Exteriors, and Commercial Interior Projects*.\r\n\r\nWith a strong focus on *quality, creativity, functionality, and attention to detail*, we work closely with our clients throughout every stage of the project — from planning and material selection to execution and final finishing.",
+    "closing_text": "At Classic Comfort, we don’t just design spaces.\r\n_We turn spaces into stories and dreams into beautiful homes._",
+    "image": "media/about/Image_Material_samples_and_design_drawings_ywgy3y",
+    "vision_title": "Our Vision",
+    "vision_text": "_Crafting your space, Crafting memories_",
+    "promise_title": "Our Promise"
+  }
+},
+{
+  "model": "core.aboutworktype",
+  "pk": 1,
+  "fields": {
+    "display_order": 1,
+    "is_active": true,
+    "about": 1,
+    "title": "Interior",
+    "subtitle": "Works",
+    "section": "interior"
+  }
+},
+{
+  "model": "core.aboutworktype",
+  "pk": 2,
+  "fields": {
+    "display_order": 2,
+    "is_active": true,
+    "about": 1,
+    "title": "Exterior",
+    "subtitle": "Works",
+    "section": "exterior"
+  }
+},
+{
+  "model": "core.aboutworktype",
+  "pk": 3,
+  "fields": {
+    "display_order": 3,
+    "is_active": true,
+    "about": 1,
+    "title": "Commercial",
+    "subtitle": "Works",
+    "section": "exterior"
+  }
+},
+{
+  "model": "core.aboutpromise",
+  "pk": 1,
+  "fields": {
+    "display_order": 1,
+    "is_active": true,
+    "about": 1,
+    "text": "Quality"
+  }
+},
+{
+  "model": "core.aboutpromise",
+  "pk": 2,
+  "fields": {
+    "display_order": 2,
+    "is_active": true,
+    "about": 1,
+    "text": "Transparency"
+  }
+},
+{
+  "model": "core.aboutpromise",
+  "pk": 3,
+  "fields": {
+    "display_order": 3,
+    "is_active": true,
+    "about": 1,
+    "text": "Creativity"
+  }
+},
+{
+  "model": "core.aboutpromise",
+  "pk": 4,
+  "fields": {
+    "display_order": 4,
+    "is_active": true,
+    "about": 1,
+    "text": "On-Time Execution"
+  }
+},
+{
+  "model": "core.aboutpromise",
+  "pk": 5,
+  "fields": {
+    "display_order": 5,
+    "is_active": true,
+    "about": 1,
+    "text": "Client Satisfaction"
+  }
+},
+{
+  "model": "core.interiorsection",
+  "pk": 1,
+  "fields": {
+    "section_label": "What We Do Inside",
+    "heading": "Interior Works",
+    "description": "Every element of your home — designed, manufactured and installed by our own team.",
+    "enquire_button_text": "Enquire"
+  }
+},
+{
+  "model": "core.interiorservice",
+  "pk": 1,
+  "fields": {
+    "display_order": 1,
+    "is_active": true,
+    "title": "Kitchen Interior",
+    "description": "Modular kitchens planned for flow, storage and lasting finishes.",
+    "image": "media/services/Image_Kitchen_Interior_nzz9jv",
+    "section": 1
+  }
+},
+{
+  "model": "core.interiorservice",
+  "pk": 2,
+  "fields": {
+    "display_order": 2,
+    "is_active": true,
+    "title": "Wardrobes",
+    "description": "Sliding, hinged and walk-in wardrobes tailored to every inch.",
+    "image": "media/services/Image_Wardrobes_ownbqk",
+    "section": 1
+  }
+},
+{
+  "model": "core.interiorservice",
+  "pk": 3,
+  "fields": {
+    "display_order": 3,
+    "is_active": true,
+    "title": "TV Unit",
+    "description": "Feature walls and media units with integrated lighting.",
+    "image": "media/services/Image_TV_Unit_mm9xlm",
+    "section": 1
+  }
+},
+{
+  "model": "core.interiorservice",
+  "pk": 4,
+  "fields": {
+    "display_order": 4,
+    "is_active": true,
+    "title": "Puja Unit",
+    "description": "Serene, crafted mandir units in wood, jali and brass.",
+    "image": "media/services/Image_Puja_Unit_uwdf5d",
+    "section": 1
+  }
+},
+{
+  "model": "core.interiorservice",
+  "pk": 5,
+  "fields": {
+    "display_order": 5,
+    "is_active": true,
+    "title": "Panelling Work",
+    "description": "Fluted, upholstered and veneer wall panelling.",
+    "image": "media/services/Image_Panelling_Work_ysk0u8",
+    "section": 1
+  }
+},
+{
+  "model": "core.interiorservice",
+  "pk": 6,
+  "fields": {
+    "display_order": 6,
+    "is_active": true,
+    "title": "False Ceiling",
+    "description": "Gypsum and POP ceilings with layered cove lighting.",
+    "image": "media/services/Image_False_Ceiling_jx7hre",
+    "section": 1
+  }
+},
+{
+  "model": "core.interiorservice",
+  "pk": 7,
+  "fields": {
+    "display_order": 7,
+    "is_active": true,
+    "title": "Flooring",
+    "description": "Wood, marble, vinyl and tile flooring installed with precision.",
+    "image": "media/services/Image_Flooring_wysxfr",
+    "section": 1
+  }
+},
+{
+  "model": "core.interiorservice",
+  "pk": 8,
+  "fields": {
+    "display_order": 8,
+    "is_active": true,
+    "title": "Wallpaper",
+    "description": "Curated textures and murals for statement walls.",
+    "image": "media/services/Image_Wallpaper_pdbqsq",
+    "section": 1
+  }
+},
+{
+  "model": "core.exteriorsection",
+  "pk": 1,
+  "fields": {
+    "section_label": "Facades & Brands",
+    "heading": "Exterior & Commercial Works",
+    "description": "Durable, beautifully detailed facades and signage that make a strong first impression.",
+    "enquire_button_text": "Enquire"
+  }
+},
+{
+  "model": "core.exteriorservice",
+  "pk": 1,
+  "fields": {
+    "display_order": 1,
+    "is_active": true,
+    "title": "Exterior Elevation Board",
+    "description": "Facade elevations in stone, HPL and louvers that define arrival.",
+    "image": "media/services/Image_Exterior_Elevation_Board_fcyhhw",
+    "section": 1
+  }
+},
+{
+  "model": "core.exteriorservice",
+  "pk": 2,
+  "fields": {
+    "display_order": 2,
+    "is_active": true,
+    "title": "Sign Board",
+    "description": "3D lit letters, LED and metal signage for brands.",
+    "image": "media/services/Image_Sign_Board_zqpuud",
+    "section": 1
+  }
+},
+{
+  "model": "core.exteriorservice",
+  "pk": 3,
+  "fields": {
+    "display_order": 3,
+    "is_active": true,
+    "title": "Flex Works",
+    "description": "Large-format flex printing and framed installations.",
+    "image": "media/services/Image_Flex_Works_chgfvg",
+    "section": 1
+  }
+},
+{
+  "model": "core.exteriorservice",
+  "pk": 4,
+  "fields": {
+    "display_order": 4,
+    "is_active": true,
+    "title": "Curtain Wall Glass Works",
+    "description": "Structural and semi-unitized glazing systems.",
+    "image": "media/services/Image_ACP_Work_fhmuv2",
+    "section": 1
+  }
+},
+{
+  "model": "core.exteriorservice",
+  "pk": 5,
+  "fields": {
+    "display_order": 5,
+    "is_active": true,
+    "title": "ACP Work",
+    "description": "Aluminium composite cladding for clean, durable facades.",
+    "image": "media/services/Image_ACP_Work_riuvuo",
+    "section": 1
+  }
+},
+{
+  "model": "core.interiorprojectsection",
+  "pk": 1,
+  "fields": {
+    "section_label": "Showcase",
+    "heading": "Interior Projects",
+    "description": "A look at rooms we’ve recently completed."
+  }
+},
+{
+  "model": "core.interiorproject",
+  "pk": 1,
+  "fields": {
+    "display_order": 1,
+    "is_active": true,
+    "title": "Kitchen",
+    "image": "media/projects/WhatsApp_Image_2026-10-08_at_10.17.03_AM17_oudlzs",
+    "size": "wide",
+    "section": 1
+  }
+},
+{
+  "model": "core.interiorproject",
+  "pk": 2,
+  "fields": {
+    "display_order": 2,
+    "is_active": true,
+    "title": "Living Room",
+    "image": "media/projects/WhatsApp_Image_2026-10-07_at_11.13.58_AM1_rwegyd",
+    "size": "tall",
+    "section": 1
+  }
+},
+{
+  "model": "core.interiorproject",
+  "pk": 3,
+  "fields": {
+    "display_order": 3,
+    "is_active": true,
+    "title": "Bedroom",
+    "image": "media/projects/WhatsApp_Image_2026-10-07_at_wl0y09",
+    "size": "normal",
+    "section": 1
+  }
+},
+{
+  "model": "core.interiorproject",
+  "pk": 4,
+  "fields": {
+    "display_order": 4,
+    "is_active": true,
+    "title": "Wardrobe",
+    "image": "media/projects/WhatsApp_Image_2026-10-07_at_11.13.58_AM3_zgnyu2",
+    "size": "normal",
+    "section": 1
+  }
+},
+{
+  "model": "core.interiorproject",
+  "pk": 5,
+  "fields": {
+    "display_order": 5,
+    "is_active": true,
+    "title": "TV Unit",
+    "image": "media/projects/WhatsApp_Image_2026-10-07_at_11.13.59_AM5_vwptv1",
+    "size": "normal",
+    "section": 1
+  }
+},
+{
+  "model": "core.interiorproject",
+  "pk": 6,
+  "fields": {
+    "display_order": 6,
+    "is_active": true,
+    "title": "False Ceiling",
+    "image": "media/projects/WhatsApp_Image_2026-10-07_at_11.1_ir21gq",
+    "size": "wide",
+    "section": 1
+  }
+},
+{
+  "model": "core.whychoosesection",
+  "pk": 1,
+  "fields": {
+    "section_label": "Why Choose Us",
+    "heading": "Built on detail and trust"
+  }
+},
+{
+  "model": "core.whychooseitem",
+  "pk": 1,
+  "fields": {
+    "display_order": 1,
+    "is_active": true,
+    "title": "Custom Design",
+    "description": "Every layout and finish is drawn for your space, your routine and your taste.",
+    "section": 1
+  }
+},
+{
+  "model": "core.whychooseitem",
+  "pk": 2,
+  "fields": {
+    "display_order": 2,
+    "is_active": true,
+    "title": "Quality Materials",
+    "description": "Branded boards, hardware and glass, chosen for how they age — not just how they look.",
+    "section": 1
+  }
+},
+{
+  "model": "core.whychooseitem",
+  "pk": 3,
+  "fields": {
+    "display_order": 3,
+    "is_active": true,
+    "title": "Skilled Workmanship",
+    "description": "Experienced in-house craftsmen with tight finishing standards on every joint.",
+    "section": 1
+  }
+},
+{
+  "model": "core.whychooseitem",
+  "pk": 4,
+  "fields": {
+    "display_order": 4,
+    "is_active": true,
+    "title": "On-Time Execution",
+    "description": "Clear schedules, weekly updates and a single point of contact until handover.",
+    "section": 1
+  }
+},
+{
+  "model": "core.processsection",
+  "pk": 1,
+  "fields": {
+    "section_label": "Our Process",
+    "heading": "From first visit to final handover"
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": 1,
+  "fields": {
+    "display_order": 1,
+    "is_active": true,
+    "title": "Consultation",
+    "description": "We visit, listen and understand your needs and budget.",
+    "section": 1
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": 2,
+  "fields": {
+    "display_order": 2,
+    "is_active": true,
+    "title": "Design & Planning",
+    "description": "2D layouts, 3D views and a detailed scope.",
+    "section": 1
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": 3,
+  "fields": {
+    "display_order": 3,
+    "is_active": true,
+    "title": "Material Selection",
+    "description": "Finishes, hardware and samples chosen together.",
+    "section": 1
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": 4,
+  "fields": {
+    "display_order": 4,
+    "is_active": true,
+    "title": "Execution",
+    "description": "Manufacturing and installation by our team.",
+    "section": 1
+  }
+},
+{
+  "model": "core.processstep",
+  "pk": 5,
+  "fields": {
+    "display_order": 5,
+    "is_active": true,
+    "title": "Final Handover",
+    "description": "Quality check, cleaning and walkthrough.",
+    "section": 1
+  }
+},
+{
+  "model": "core.portfoliosection",
+  "pk": 1,
+  "fields": {
+    "section_label": "Portfolio",
+    "heading": "Our Projects",
+    "all_filter_text": "All"
+  }
+},
+{
+  "model": "core.projectcategory",
+  "pk": 1,
+  "fields": {
+    "display_order": 1,
+    "is_active": true,
+    "section": 1,
+    "name": "Interior",
+    "slug": "interior"
+  }
+},
+{
+  "model": "core.projectcategory",
+  "pk": 2,
+  "fields": {
+    "display_order": 2,
+    "is_active": true,
+    "section": 1,
+    "name": "Exterior",
+    "slug": "exterior"
+  }
+},
+{
+  "model": "core.projectcategory",
+  "pk": 3,
+  "fields": {
+    "display_order": 3,
+    "is_active": true,
+    "section": 1,
+    "name": "Commercial",
+    "slug": "commercial"
+  }
+},
+{
+  "model": "core.portfolioproject",
+  "pk": 1,
+  "fields": {
+    "display_order": 1,
+    "is_active": true,
+    "category": 1,
+    "title": "Modular Kitchen",
+    "subtitle": "Residential",
+    "image": "media/portfolio/WhatsApp_Image_2026-10-08_at_10.17.02_AM14_foy31i"
+  }
+},
+{
+  "model": "core.portfolioproject",
+  "pk": 2,
+  "fields": {
+    "display_order": 2,
+    "is_active": true,
+    "category": 1,
+    "title": "TV Unit cum Puja Unit",
+    "subtitle": "Residential",
+    "image": "media/portfolio/WhatsApp_Image_2026-10-08_at_10.17.01_AM11_icpf97"
+  }
+},
+{
+  "model": "core.portfolioproject",
+  "pk": 3,
+  "fields": {
+    "display_order": 3,
+    "is_active": true,
+    "category": 1,
+    "title": "Wardrobe",
+    "subtitle": "Residential",
+    "image": "media/portfolio/WhatsApp_Image_2026-10-08_at_10.16.59_AM5_dcyqvu"
+  }
+},
+{
+  "model": "core.portfolioproject",
+  "pk": 4,
+  "fields": {
+    "display_order": 4,
+    "is_active": true,
+    "category": 1,
+    "title": "Wardrobe",
+    "subtitle": "Residential",
+    "image": "media/portfolio/WhatsApp_Image_2026-10-08_at_10.17.00_AM9_lj7tib"
+  }
+},
+{
+  "model": "core.portfolioproject",
+  "pk": 5,
+  "fields": {
+    "display_order": 5,
+    "is_active": true,
+    "category": 1,
+    "title": "Wardrobe",
+    "subtitle": "Residential",
+    "image": "media/portfolio/WhatsApp_Image_2026-10-08_at_10.16.58_AM4_edbvv4"
+  }
+},
+{
+  "model": "core.portfolioproject",
+  "pk": 6,
+  "fields": {
+    "display_order": 6,
+    "is_active": true,
+    "category": 1,
+    "title": "Wardrobe",
+    "subtitle": "Residential",
+    "image": "media/portfolio/WhatsApp_Image_2026-10-08_at_10.16.59_AM6_rbsgov"
+  }
+},
+{
+  "model": "core.portfolioproject",
+  "pk": 7,
+  "fields": {
+    "display_order": 7,
+    "is_active": true,
+    "category": 1,
+    "title": "Modular Kitchen",
+    "subtitle": "Residential",
+    "image": "media/portfolio/WhatsApp_Image_2026-10-08_at_10.17.02_AM13_iytawk"
+  }
+},
+{
+  "model": "core.portfolioproject",
+  "pk": 8,
+  "fields": {
+    "display_order": 8,
+    "is_active": true,
+    "category": 1,
+    "title": "Modular Kitchen",
+    "subtitle": "Residential",
+    "image": "media/portfolio/WhatsApp_Image_2026-10-08_at_10.17.03_AM18_dfsmbg"
+  }
+},
+{
+  "model": "core.portfolioproject",
+  "pk": 9,
+  "fields": {
+    "display_order": 9,
+    "is_active": true,
+    "category": 1,
+    "title": "Modular Kitchen",
+    "subtitle": "Residential",
+    "image": "media/portfolio/WhatsApp_Image_2026-10-08_at_10.17.03_AM17_fcygjy"
+  }
+},
+{
+  "model": "core.testimonialsection",
+  "pk": 1,
+  "fields": {
+    "section_label": "Testimonials",
+    "heading": "Words from our clients"
+  }
+},
+{
+  "model": "core.testimonial",
+  "pk": 1,
+  "fields": {
+    "display_order": 1,
+    "is_active": true,
+    "section": 1,
+    "quote": "The kitchen and wardrobes came out exactly like the 3D views. The team was patient with every change we asked for.",
+    "client_name": "Homeowner",
+    "project_type": "Kitchen & Wardrobes"
+  }
+},
+{
+  "model": "core.testimonial",
+  "pk": 2,
+  "fields": {
+    "display_order": 2,
+    "is_active": true,
+    "section": 1,
+    "quote": "They handled our office facade and lobby together, which saved us a lot of coordination. Clean, professional work.",
+    "client_name": "Business Owner",
+    "project_type": "Commercial Fit-out"
+  }
+},
+{
+  "model": "core.testimonial",
+  "pk": 3,
+  "fields": {
+    "display_order": 3,
+    "is_active": true,
+    "section": 1,
+    "quote": "Our false ceiling and TV wall transformed the living room. Neat finishing and the site was left spotless.",
+    "client_name": "Homeowner",
+    "project_type": "Living Room"
+  }
+},
+{
+  "model": "core.ctasection",
+  "pk": 1,
+  "fields": {
+    "section_label": "Start Today",
+    "heading": "Let’s Create A Space You’ll Love",
+    "background_image": "media/cta/Image_12_e82imc",
+    "primary_button_text": "Get a Quote",
+    "secondary_button_text": "Contact Us"
+  }
+},
+{
+  "model": "core.contactsection",
+  "pk": 1,
+  "fields": {
+    "section_label": "Contact",
+    "heading": "Tell us about your space",
+    "description": "Share a few details and our team will get back within one working day.",
+    "address": "No 5, Ganesh nagar, ayapakkam, Chennai 600077",
+    "phone_numbers": "6374851724, 8525896731",
+    "email": "classiccomfortinteriorexterior@gmail.com",
+    "instagram_handle": "classic_Comfort_interior",
+    "form_button_text": "Send Enquiry",
+    "service_placeholder": "Service Required",
+    "success_message": "Thank you! Our team will get back to you within one working day."
+  }
+},
+{
+  "model": "core.footersettings",
+  "pk": 1,
+  "fields": {
+    "footer_logo": "",
+    "about_text": "Interior, exterior and commercial works — designed and built with care.",
+    "follow_text": "Follow us,",
+    "quick_links_title": "Quick Links",
+    "interior_title": "Interior",
+    "exterior_title": "Exterior",
+    "contact_title": "Contact",
+    "copyright_text": "All rights reserved.",
+    "credit_prefix": "Designed & Developed by",
+    "credit_name": "Vetri IT Systems",
+    "credit_url": "https://vetriitsystems.com/"
+  }
+},
+{
+  "model": "core.sociallink",
+  "pk": 1,
+  "fields": {
+    "display_order": 1,
+    "is_active": true,
+    "footer": 1,
+    "platform": "instagram",
+    "url": "https://www.instagram.com/classic_Comfort_interior/"
+  }
+},
+{
+  "model": "core.sociallink",
+  "pk": 2,
+  "fields": {
+    "display_order": 2,
+    "is_active": true,
+    "footer": 1,
+    "platform": "facebook",
+    "url": ""
+  }
+},
+{
+  "model": "core.floatingbuttons",
+  "pk": 1,
+  "fields": {
+    "show_call": true,
+    "call_number": "6374851724",
+    "show_whatsapp": true,
+    "whatsapp_number": "6374851724",
+    "whatsapp_message": "Hi, I would like to know more about your interior and exterior services.",
+    "show_instagram": true,
+    "instagram_url": "https://www.instagram.com/classic_Comfort_interior/"
+  }
+},
+{
+  "model": "core.emailsettings",
+  "pk": 1,
+  "fields": {
+    "smtp_host": "smtp.gmail.com",
+    "smtp_port": 587,
+    "use_tls": true,
+    "use_ssl": false,
+    "smtp_username": "classiccomfortinteriorexterior@gmail.com",
+    "smtp_password": "",
+    "from_email": "classiccomfortinteriorexterior@gmail.com",
+    "notify_email": "classiccomfortinteriorexterior@gmail.com",
+    "send_auto_reply": true,
+    "auto_reply_subject": "Thank you for contacting Classic Comfort Interior and Exterior",
+    "auto_reply_message": "Thank you for reaching out to us. We have received your enquiry and our team will get back to you within one working day.\n\nWarm regards,\nClassic Comfort Interior and Exterior"
+  }
+}
+]

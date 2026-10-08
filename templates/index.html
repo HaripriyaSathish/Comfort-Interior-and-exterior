@@ -295,9 +295,7 @@
               <h3 class="card-title">{{ p.title }}</h3>
               {% if p.subtitle %}<p class="project-sub">{{ p.subtitle }}</p>{% endif %}
             </div>
-            {% if p.image or p.images.all %}
-              <button class="project-open" type="button" aria-label="View photos of {{ p.title }}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            {% endif %}
+            <a href="#contact" class="project-open" data-service="{{ p.title }}" aria-label="Enquire about {{ p.title }}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
           <div class="gallery-src" hidden>
             {% if p.image %}<span data-src="{{ p.image|cld:'w_1800' }}" data-caption="{{ p.title }}"></span>{% endif %}

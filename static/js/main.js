@@ -72,15 +72,21 @@
     revealEls.forEach((el) => el.classList.add('in-view'));
   }
 
-  /* ------------------------------------------------------------ enquire buttons → contact form */
+  /* ------------------------------------------------------------ enquire buttons + project arrows → contact form */
   const serviceSelect = $('#id_service');
-  $$('.enquire-link[data-service]').forEach((link) => {
+  $$('a[href="#contact"][data-service]').forEach((link) => {
     link.addEventListener('click', () => {
       if (!serviceSelect) return;
       const wanted = link.dataset.service;
-      const option = Array.from(serviceSelect.options).find((o) => o.value === wanted);
+      const options = Array.from(serviceSelect.options).filter((o) => o.value);
+      // exact match first (service cards), then a key-word match (project names like
+      // "Modular Kitchen" → "Kitchen Interior", "Wardrobe" → "Wardrobes")
+      const stem = (w) => w.toLowerCase().replace(/s$/, '');
+      const words = wanted.split(/\s+/).map(stem).filter((w) => w.length > 3);
+      const option = options.find((o) => o.value === wanted)
+        || options.find((o) => o.value.split(/\s+/).map(stem).some((w) => words.includes(w)));
       if (option) {
-        serviceSelect.value = wanted;
+        serviceSelect.value = option.value;
         validateField(serviceSelect);
       }
       // focus the first empty field once the smooth scroll has finished
@@ -192,8 +198,6 @@
   projectCards.forEach((card) => {
     const items = $$('.gallery-src span', card).map((s) => ({ src: s.dataset.src, caption: s.dataset.caption }));
     const open = () => openLb(items, 0);
-    const btn = $('.project-open', card);
-    if (btn) btn.addEventListener('click', open);
     const img = $('.project-img img', card);
     if (img && items.length) {
       img.style.cursor = 'zoom-in';
