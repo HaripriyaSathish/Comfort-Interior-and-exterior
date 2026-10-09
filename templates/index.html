@@ -41,7 +41,7 @@
   <link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   {% if hero.background_image %}<link rel="preload" as="image" href="{{ hero.background_image|cld:'w_1920' }}">{% endif %}
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}{% if asset_v %}?v={{ asset_v }}{% endif %}">
 
   {% if site.google_analytics_id %}
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics_id }}"></script>
@@ -107,9 +107,15 @@
   <div class="about-grid">
     <div class="about-text reveal">
       <p class="eyebrow">{{ about.section_label }}</p>
+      {% if about.heading %}<h2 class="section-title about-title">{{ about.heading }}</h2>{% endif %}
       {% if about.intro %}<p class="about-intro">{{ about.intro|highlight }}</p>{% endif %}
       <div class="rich">{{ about.content|rich_text }}</div>
-      <div class="rich about-closing">{{ about.closing_text|rich_text }}</div>
+      {% if about.closing_text %}<div class="rich about-closing">{{ about.closing_text|rich_text }}</div>{% endif %}
+
+      {% if about.mission_text %}
+        <h3 class="vision-title">{{ about.mission_title }}</h3>
+        <p class="vision-text">{{ about.mission_text|highlight }}</p>
+      {% endif %}
 
       {% if about.vision_text %}
         <h3 class="vision-title">{{ about.vision_title }}</h3>
@@ -143,7 +149,7 @@
   {% if about_promises %}
     <div class="promise reveal">
       <h3 class="promise-title">{{ about.promise_title }}</h3>
-      <p class="promise-list">{% for p in about_promises %}{{ p.text }}{% if not forloop.last %} <span class="dot">&bull;</span> {% endif %}{% endfor %}</p>
+      <p class="promise-list">{% for p in about_promises %}<span class="promise-item">{{ p.text }}</span>{% if not forloop.last %} <span class="dot">&bull;</span> {% endif %}{% endfor %}</p>
     </div>
   {% endif %}
   </div>
@@ -274,11 +280,12 @@
       <div>
         <p class="eyebrow">{{ portfolio.section_label }}</p>
         <h2 class="section-title">{{ portfolio.heading }}</h2>
+        {% if portfolio.description %}<p class="section-text">{{ portfolio.description }}</p>{% endif %}
       </div>
       <div class="filters" role="tablist" aria-label="Filter projects">
-        <button class="filter-btn is-active" data-filter="all" role="tab" aria-selected="true">{{ portfolio.all_filter_text }}</button>
+        <button class="filter-btn is-active" data-filter="all" role="tab" aria-selected="true"{% if portfolio.all_filter_title %} title="{{ portfolio.all_filter_title }}"{% endif %}>{{ portfolio.all_filter_text }}</button>
         {% for c in portfolio_categories %}
-          <button class="filter-btn" data-filter="{{ c.slug }}" role="tab" aria-selected="false">{{ c.name }}</button>
+          <button class="filter-btn" data-filter="{{ c.slug }}" role="tab" aria-selected="false"{% if c.hover_title %} title="{{ c.hover_title }}"{% endif %}>{{ c.name }}</button>
         {% endfor %}
       </div>
     </div>
@@ -293,6 +300,7 @@
             <div>
               <p class="project-cat">{{ p.category.name }}</p>
               <h3 class="card-title">{{ p.title }}</h3>
+              {% if p.description %}<p class="project-desc">{{ p.description }}</p>{% endif %}
               {% if p.subtitle %}<p class="project-sub">{{ p.subtitle }}</p>{% endif %}
             </div>
             <a href="#contact" class="project-open" data-service="{{ p.title }}" aria-label="Enquire about {{ p.title }}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
@@ -315,6 +323,7 @@
     <div class="section-head center reveal">
       <p class="eyebrow">{{ testimonial_section.section_label }}</p>
       <h2 class="section-title">{{ testimonial_section.heading }}</h2>
+      {% if testimonial_section.description %}<p class="section-text">{{ testimonial_section.description }}</p>{% endif %}
     </div>
     <div class="testimonial-grid">
       {% for t in testimonials %}
@@ -339,6 +348,7 @@
   <div class="container cta-content reveal">
     <p class="eyebrow">{{ cta.section_label }}</p>
     <h2 class="cta-title">{{ cta.heading }}</h2>
+    {% if cta.description %}<div class="cta-text">{{ cta.description|rich_text }}</div>{% endif %}
     <div class="btn-row center">
       <a href="#contact" class="btn btn-gold">{{ cta.primary_button_text }}</a>
       <a href="#contact" class="btn btn-outline-light">{{ cta.secondary_button_text }}</a>
@@ -352,6 +362,8 @@
     <div class="contact-info reveal">
       <p class="eyebrow">{{ contact.section_label }}</p>
       <h2 class="section-title">{{ contact.heading }}</h2>
+      {% if contact.subheading %}<h3 class="contact-subheading">{{ contact.subheading }}</h3>{% endif %}
+      {% if contact.intro %}<p class="contact-intro">{{ contact.intro }}</p>{% endif %}
       <p class="section-text">{{ contact.description }}</p>
 
       <ul class="info-list">
@@ -370,7 +382,7 @@
         {% if contact.email %}
           <li>
             <span class="info-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
-            <div><small>Email</small><a href="mailto:{{ contact.email }}">{{ contact.email }}</a></div>
+            <div><small>Email</small><a href="mailto:{{ contact.email }}">{{ contact.email|email_break }}</a></div>
           </li>
         {% endif %}
         {% if contact.instagram_handle %}
@@ -431,6 +443,27 @@
   </div>
 </section>
 
+{# ================================================================ FAQ #}
+{% if faq_items %}
+<section class="faq" id="faq">
+  <div class="wrap-1280">
+    <div class="section-head center reveal">
+      <p class="eyebrow">{{ faq.section_label }}</p>
+      <h2 class="section-title">{{ faq.heading }}</h2>
+    </div>
+    <div class="faq-list reveal">
+      {% for item in faq_items %}
+        <details class="faq-item"{% if forloop.first %} open{% endif %}>
+          <summary><h3 class="faq-q">{{ item.question }}</h3><span class="faq-icon" aria-hidden="true"></span></summary>
+          <div class="faq-a">{{ item.answer|linebreaks }}</div>
+        </details>
+      {% endfor %}
+    </div>
+  </div>
+  <script type="application/ld+json">{{ faq_schema }}</script>
+</section>
+{% endif %}
+
 </main>
 
 {# ================================================================ FOOTER #}
@@ -488,7 +521,7 @@
         {% endif %}
         {% if contact.email %}
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-            <a href="mailto:{{ contact.email }}" class="footer-email">{{ contact.email }}</a></li>
+            <a href="mailto:{{ contact.email }}" class="footer-email">{{ contact.email|email_break }}</a></li>
         {% endif %}
       </ul>
     </div>
@@ -538,6 +571,6 @@
   <span class="lb-count" id="lbCount"></span>
 </div>
 
-<script src="{% static 'js/main.js' %}" defer></script>
+<script src="{% static 'js/main.js' %}{% if asset_v %}?v={{ asset_v }}{% endif %}" defer></script>
 </body>
 </html>

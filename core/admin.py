@@ -6,7 +6,7 @@ from django.urls import path, reverse
 from django.utils.html import format_html
 
 from .models import (
-    AboutPromise, AboutSection, AboutWorkType, ContactSection, CTASection, EmailSettings, Enquiry, FloatingButtons, FooterSettings, ExteriorSection, ExteriorService,
+    AboutPromise, AboutSection, AboutWorkType, ContactSection, CTASection, EmailSettings, Enquiry, EnquiryService, FAQItem, FAQSection, FloatingButtons, FooterSettings, ExteriorSection, ExteriorService,
     HeroSection, InteriorProject,
     InteriorProjectSection, InteriorSection, InteriorService, NavMenuItem, PortfolioProject,
     PortfolioProjectImage, PortfolioSection, ProcessSection, ProcessStep, ProjectCategory, SiteSettings,
@@ -116,8 +116,9 @@ class AboutPromiseInline(admin.TabularInline):
 @admin.register(AboutSection)
 class AboutSectionAdmin(SingletonAdmin):
     fieldsets = (
-        ('Text', {'fields': ('section_label', 'intro', 'content', 'closing_text')}),
+        ('Text', {'fields': ('section_label', 'heading', 'intro', 'content', 'closing_text')}),
         ('Image', {'fields': ('image', 'image_preview')}),
+        ('Mission', {'fields': ('mission_title', 'mission_text')}),
         ('Vision', {'fields': ('vision_title', 'vision_text')}),
         ('Promise', {'fields': ('promise_title',),
                      'description': 'Add the promise words in the table at the bottom of this page.'}),
@@ -226,13 +227,13 @@ class ProcessSectionAdmin(NumberedSectionAdmin):
 # ------------------------------------------------------------------
 class ProjectCategoryInline(admin.TabularInline):
     model = ProjectCategory
-    fields = ('name', 'display_order', 'is_active')
+    fields = ('name', 'hover_title', 'display_order', 'is_active')
     extra = 0
 
 
 @admin.register(PortfolioSection)
 class PortfolioSectionAdmin(SingletonAdmin):
-    fields = ('section_label', 'heading', 'all_filter_text')
+    fields = ('section_label', 'heading', 'description', 'all_filter_text', 'all_filter_title')
     inlines = (ProjectCategoryInline,)
 
 
@@ -254,7 +255,7 @@ class PortfolioProjectAdmin(admin.ModelAdmin):
     list_editable = ('display_order', 'is_active')
     list_filter = ('category', 'is_active')
     search_fields = ('title', 'subtitle')
-    fields = ('category', 'title', 'subtitle', 'image', 'image_preview', 'display_order', 'is_active')
+    fields = ('category', 'title', 'subtitle', 'description', 'image', 'image_preview', 'display_order', 'is_active')
     readonly_fields = ('image_preview',)
     inlines = (PortfolioProjectImageInline,)
 
@@ -285,7 +286,7 @@ class TestimonialInline(admin.StackedInline):
 
 @admin.register(TestimonialSection)
 class TestimonialSectionAdmin(SingletonAdmin):
-    fields = ('section_label', 'heading')
+    fields = ('section_label', 'heading', 'description')
     inlines = (TestimonialInline,)
 
 
@@ -295,7 +296,7 @@ class TestimonialSectionAdmin(SingletonAdmin):
 @admin.register(CTASection)
 class CTASectionAdmin(SingletonAdmin):
     fieldsets = (
-        ('Text', {'fields': ('section_label', 'heading')}),
+        ('Text', {'fields': ('section_label', 'heading', 'description')}),
         ('Background', {'fields': ('background_image', 'background_preview')}),
         ('Buttons', {'fields': ('primary_button_text', 'secondary_button_text')}),
     )
@@ -309,17 +310,41 @@ class CTASectionAdmin(SingletonAdmin):
 # ------------------------------------------------------------------
 # CONTACT + ENQUIRIES
 # ------------------------------------------------------------------
+class EnquiryServiceInline(admin.TabularInline):
+    model = EnquiryService
+    fields = ('name', 'display_order', 'is_active')
+    extra = 0
+
+
 @admin.register(ContactSection)
 class ContactSectionAdmin(SingletonAdmin):
     fieldsets = (
-        ('Text', {'fields': ('section_label', 'heading', 'description')}),
+        ('Text', {'fields': ('section_label', 'heading', 'subheading', 'intro', 'description')}),
         ('Contact details', {'fields': ('address', 'phone_numbers', 'email', 'instagram_handle')}),
         ('Enquiry form', {
-            'fields': ('service_placeholder', 'form_button_text', 'success_message'),
-            'description': 'The service dropdown is filled automatically from the Interior and '
-                           'Exterior service cards, plus an "Other" option.',
+            'fields': ('name_placeholder', 'phone_placeholder', 'email_placeholder', 'service_placeholder',
+                       'message_placeholder', 'form_button_text', 'success_message'),
+            'description': 'The service dropdown uses the options in the table at the bottom of this page '
+                           '("Other" is always added). If that table is empty, it is filled from the '
+                           'Interior and Exterior service cards.',
         }),
     )
+    inlines = (EnquiryServiceInline,)
+
+
+# ------------------------------------------------------------------
+# FAQ
+# ------------------------------------------------------------------
+class FAQItemInline(admin.StackedInline):
+    model = FAQItem
+    fields = ('question', 'answer', 'display_order', 'is_active')
+    extra = 0
+
+
+@admin.register(FAQSection)
+class FAQSectionAdmin(SingletonAdmin):
+    fields = ('section_label', 'heading')
+    inlines = (FAQItemInline,)
 
 
 @admin.register(Enquiry)

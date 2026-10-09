@@ -1,18 +1,36 @@
+import json
+
 from django.contrib import messages
 from django.core.cache import cache
 from django.db.models import Prefetch
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
+from django.utils.safestring import mark_safe
 from django.views.decorators.http import require_POST
 
 from .emails import send_enquiry_emails
 from .forms import EnquiryForm
 
 from .models import (
-    AboutSection, ContactSection, CTASection, ExteriorSection, FloatingButtons, FooterSettings, HeroSection, InteriorProjectSection, InteriorSection, NavMenuItem,
+    AboutSection, ContactSection, CTASection, ExteriorSection, FAQSection, FloatingButtons, FooterSettings, HeroSection, InteriorProjectSection, InteriorSection, NavMenuItem,
     PortfolioProject, PortfolioProjectImage, PortfolioSection,
     ProcessSection, TestimonialSection, WhyChooseSection,
 )
+
+
+def faq_schema(items):
+    """FAQPage structured data, so Google can show the questions in search results."""
+    data = {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        'mainEntity': [
+            {'@type': 'Question', 'name': item.question,
+             'acceptedAnswer': {'@type': 'Answer', 'text': item.answer}}
+            for item in items
+        ],
+    }
+    # escape "<" so an answer can never close the <script> tag
+    return mark_safe(json.dumps(data, ensure_ascii=False).replace('<', '\\u003c'))
 
 
 def index(request, enquiry_form=None):
@@ -25,6 +43,8 @@ def index(request, enquiry_form=None):
     portfolio = PortfolioSection.load()
     testimonials = TestimonialSection.load()
     contact = ContactSection.load()
+    faq = FAQSection.load()
+    faq_items = faq.items.filter(is_active=True)
     footer = FooterSettings.load()
     context = {
         'nav_items': NavMenuItem.objects.filter(is_active=True),
@@ -54,10 +74,13 @@ def index(request, enquiry_form=None):
         'testimonials': testimonials.testimonials.filter(is_active=True),
         'cta': CTASection.load(),
         'contact': contact,
+        'faq': faq,
+        'faq_items': faq_items,
+        'faq_schema': faq_schema(faq_items),
         'footer': footer,
         'floating': FloatingButtons.load(),
         'footer_social_links': footer.social_links.filter(is_active=True).exclude(url=''),
-        'enquiry_form': enquiry_form or EnquiryForm(service_placeholder=contact.service_placeholder),
+        'enquiry_form': enquiry_form or EnquiryForm(contact=contact),
     }
     return render(request, 'index.html', context)
 
@@ -71,7 +94,7 @@ def submit_enquiry(request):
     """Contact form endpoint. Returns JSON for fetch() requests, or redirects back for plain posts."""
     is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
     contact = ContactSection.load()
-    form = EnquiryForm(request.POST, service_placeholder=contact.service_placeholder)
+    form = EnquiryForm(request.POST, contact=contact)
     ip = request.META.get('REMOTE_ADDR')
 
     def respond(ok, status=200, errors=None, message=''):

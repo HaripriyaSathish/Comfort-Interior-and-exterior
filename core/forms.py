@@ -2,7 +2,7 @@ import re
 
 from django import forms
 
-from .models import Enquiry, ExteriorService, InteriorService
+from .models import Enquiry, EnquiryService, ExteriorService, InteriorService
 
 OTHER_SERVICE = 'Other'
 
@@ -22,7 +22,13 @@ LINK_RE = re.compile(r'(https?://|www\.|<[^>]+>)', re.I)
 
 
 def service_choices():
-    """Dropdown options built from the Interior and Exterior service cards, plus 'Other'."""
+    """Dropdown options from Admin → Contact Section → Service dropdown options.
+    If that list is empty, they are built from the Interior and Exterior service cards, plus 'Other'."""
+    listed = list(EnquiryService.objects.filter(is_active=True).values_list('name', flat=True))
+    if listed:
+        if OTHER_SERVICE not in listed:
+            listed.append(OTHER_SERVICE)
+        return [(name, name) for name in listed]
     interior = list(InteriorService.objects.filter(is_active=True).values_list('title', flat=True))
     exterior = list(ExteriorService.objects.filter(is_active=True).values_list('title', flat=True))
     choices = []
@@ -64,8 +70,14 @@ class EnquiryForm(forms.ModelForm):
             'message': {'required': 'Please tell us a little about your space.'},
         }
 
-    def __init__(self, *args, service_placeholder='Service Required', **kwargs):
+    def __init__(self, *args, contact=None, **kwargs):
         super().__init__(*args, **kwargs)
+        if contact:  # placeholder texts are editable in Admin → Contact Section
+            for field, text in (('name', contact.name_placeholder), ('phone', contact.phone_placeholder),
+                                ('email', contact.email_placeholder), ('message', contact.message_placeholder)):
+                if text:
+                    self.fields[field].widget.attrs['placeholder'] = text
+        service_placeholder = contact.service_placeholder if contact else 'Service Required'
         self.fields['service'] = forms.ChoiceField(
             choices=[('', service_placeholder)] + service_choices(),
             error_messages={'required': 'Please choose the service you need.',

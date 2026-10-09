@@ -72,6 +72,49 @@
     revealEls.forEach((el) => el.classList.add('in-view'));
   }
 
+  /* ------------------------------------------------------------ process: auto highlight
+     While the section is on screen, the steps light up one after another and
+     the gold line follows. Hovering a step holds it. */
+  const stepList = $('.steps');
+  if (stepList) {
+    const steps = $$('.step', stepList);
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let active = -1;
+    let timer = null;
+    let held = false;
+
+    const setActive = (i) => {
+      active = i;
+      steps.forEach((el, n) => {
+        el.classList.toggle('is-active', n === i);
+        el.classList.toggle('is-done', n < i);
+      });
+      const box = stepList.getBoundingClientRect();
+      const num = $('.step-num', steps[i]).getBoundingClientRect();
+      stepList.style.setProperty('--progress', `${num.left + num.width / 2 - box.left}px`);
+    };
+    const advance = () => { if (!held) setActive((active + 1) % steps.length); };
+    const start = () => {
+      if (active < 0) setActive(0);
+      if (!timer && !reduceMotion) timer = setInterval(advance, 2600);
+    };
+    const stop = () => { clearInterval(timer); timer = null; };
+
+    steps.forEach((el, n) => {
+      el.addEventListener('mouseenter', () => { held = true; setActive(n); });
+      el.addEventListener('mouseleave', () => { held = false; });
+    });
+    window.addEventListener('resize', () => { if (active >= 0) setActive(active); });
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        entries.forEach((entry) => (entry.isIntersecting ? start() : stop()));
+      }, { threshold: 0.35 }).observe(stepList);
+    } else {
+      start();
+    }
+  }
+
   /* ------------------------------------------------------------ enquire buttons + project arrows → contact form */
   const serviceSelect = $('#id_service');
   $$('a[href="#contact"][data-service]').forEach((link) => {
@@ -79,12 +122,20 @@
       if (!serviceSelect) return;
       const wanted = link.dataset.service;
       const options = Array.from(serviceSelect.options).filter((o) => o.value);
-      // exact match first (service cards), then a key-word match (project names like
-      // "Modular Kitchen" → "Kitchen Interior", "Wardrobe" → "Wardrobes")
-      const stem = (w) => w.toLowerCase().replace(/s$/, '');
-      const words = wanted.split(/\s+/).map(stem).filter((w) => w.length > 3);
-      const option = options.find((o) => o.value === wanted)
-        || options.find((o) => o.value.split(/\s+/).map(stem).some((w) => words.includes(w)));
+      // exact match first, then the option sharing the most key words, ignoring generic ones
+      // ("Kitchen Interior Design" → "Modular Kitchen", "Puja Unit Design" → "Puja Unit Design")
+      const generic = ['design', 'interior', 'interiors', 'exterior', 'work', 'works', 'solution', 'wall'];
+      const keyWords = (text) => text.toLowerCase().split(/[\s-]+/).map((w) => w.replace(/s$/, ''))
+        .filter((w) => w.length > 2 && !generic.includes(w));
+      const words = keyWords(wanted);
+      let option = options.find((o) => o.value === wanted);
+      if (!option) {
+        let best = 0;
+        options.forEach((o) => {
+          const score = keyWords(o.value).filter((w) => words.includes(w)).length;
+          if (score > best) { best = score; option = o; }
+        });
+      }
       if (option) {
         serviceSelect.value = option.value;
         validateField(serviceSelect);

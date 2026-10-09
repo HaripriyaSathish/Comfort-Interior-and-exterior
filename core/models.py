@@ -58,13 +58,13 @@ class SiteSettings(SingletonModel):
     # --- SEO (Google search results) ---
     meta_title = models.CharField(
         'Page title', max_length=100,
-        default='Classic Comfort Interior and Exterior | Interior, Exterior & Commercial Design',
+        default='Interior Designers in Chennai | Classic Comfort Interior',
         help_text='Shown in the browser tab and as the blue link in Google. Keep under 60–70 characters.',
     )
     meta_description = models.TextField(
         'Meta description', max_length=170,
-        default='From bespoke kitchens and wardrobes to striking facades and commercial fit-outs, '
-                'Classic Comfort designs and builds every detail, end to end.',
+        default='Classic Comfort Interior & Exterior offers interior design services, modular kitchens, '
+                'wardrobes, false ceilings and facade works. Get a quote today.',
         help_text='The short summary under the link in Google. Keep under 155–160 characters.',
     )
     meta_keywords = models.CharField(
@@ -162,7 +162,7 @@ class NavMenuItem(OrderedModel):
 class HeroSection(SingletonModel):
     tagline = models.CharField(
         'Small text above heading', max_length=150,
-        default='Interior • Exterior • Commercial',
+        default='Interior · Exterior · Commercial',
     )
     heading = models.CharField(
         'Main heading', max_length=200,
@@ -170,19 +170,20 @@ class HeroSection(SingletonModel):
     )
     description = models.TextField(
         'Description',
-        default='From bespoke kitchens and wardrobes to striking facades and commercial '
-                'fit-outs — we design and build every detail, end to end.',
+        default='Planning a new home or revamping an office? Our interior design services cover '
+                'everything from a modular kitchen to a full commercial fit-out, with one team '
+                'handling design, work and finishing.',
     )
     background_image = models.ImageField(
         'Background image', upload_to='hero/', blank=True, null=True,
         help_text='Large landscape photo (at least 1920px wide recommended).',
     )
     primary_button_text = models.CharField(
-        'Main button text', max_length=50, default='Explore Our Work',
+        'Main button text', max_length=50, default='View Interior Works',
         help_text='Scrolls down to the Interior section.',
     )
     secondary_button_text = models.CharField(
-        'Second button text', max_length=50, default='Get a Quote',
+        'Second button text', max_length=50, default='Request a Quote',
         help_text='Scrolls down to the Contact section.',
     )
 
@@ -203,6 +204,10 @@ HIGHLIGHT_HELP = ('Wrap words in *stars* to show them in gold, or in _underscore
 
 class AboutSection(SingletonModel):
     section_label = models.CharField('Small heading', max_length=50, default='About Us')
+    heading = models.CharField(
+        'Main heading', max_length=150, blank=True,
+        help_text='The large heading of the section (H2 for Google).',
+    )
     intro = models.CharField('Opening line', max_length=255, blank=True, help_text=HIGHLIGHT_HELP)
     content = models.TextField('Main text', blank=True, help_text=HIGHLIGHT_HELP)
     closing_text = models.TextField('Closing lines', blank=True, help_text=HIGHLIGHT_HELP)
@@ -210,6 +215,9 @@ class AboutSection(SingletonModel):
         'Side image', upload_to='about/', blank=True, null=True,
         help_text='Tall portrait photo works best (about 3:4).',
     )
+
+    mission_title = models.CharField('Mission heading', max_length=100, default='Our Mission')
+    mission_text = models.TextField('Mission text', blank=True, help_text=HIGHLIGHT_HELP)
 
     vision_title = models.CharField('Vision heading', max_length=100, default='Our Vision')
     vision_text = models.CharField('Vision text', max_length=255, blank=True, help_text=HIGHLIGHT_HELP)
@@ -440,7 +448,12 @@ class ProcessStep(BaseNumberedItem):
 class PortfolioSection(SingletonModel):
     section_label = models.CharField('Small heading', max_length=60, default='Portfolio')
     heading = models.CharField('Main heading', max_length=100, default='Our Projects')
+    description = models.CharField('Intro text', max_length=255, blank=True)
     all_filter_text = models.CharField('"All" button text', max_length=30, default='All')
+    all_filter_title = models.CharField(
+        '"All" button hover text', max_length=120, blank=True,
+        help_text='Shown when the mouse rests on the button (also read by Google).',
+    )
 
     class Meta:
         verbose_name = 'Our Projects Section'
@@ -455,6 +468,10 @@ class ProjectCategory(OrderedModel):
                                 related_name='categories', default=1)
     name = models.CharField('Category name', max_length=50,
                             help_text='Shown as a filter button and as the small label on each project.')
+    hover_title = models.CharField(
+        'Button hover text', max_length=120, blank=True,
+        help_text='Shown when the mouse rests on the button (also read by Google).',
+    )
     slug = models.SlugField(max_length=60, unique=True, editable=False)
 
     class Meta(OrderedModel.Meta):
@@ -479,6 +496,7 @@ class PortfolioProject(OrderedModel):
     title = models.CharField('Project name', max_length=100)
     subtitle = models.CharField('Project type', max_length=60, blank=True, default='Residential',
                                 help_text='e.g. Residential, Office, Retail')
+    description = models.CharField('One-line description', max_length=200, blank=True)
     image = models.ImageField('Cover image', upload_to='portfolio/', blank=True, null=True)
 
     class Meta(OrderedModel.Meta):
@@ -508,6 +526,7 @@ class PortfolioProjectImage(OrderedModel):
 class TestimonialSection(SingletonModel):
     section_label = models.CharField('Small heading', max_length=60, default='Testimonials')
     heading = models.CharField('Main heading', max_length=100, default='Words from our clients')
+    description = models.CharField('Intro text', max_length=255, blank=True)
 
     class Meta:
         verbose_name = 'Testimonials Section'
@@ -541,6 +560,8 @@ class CTASection(SingletonModel):
     section_label = models.CharField('Small heading', max_length=60, default='Start Today')
     heading = models.CharField('Main heading', max_length=150,
                                default='Let’s Create A Space You’ll Love')
+    description = models.TextField('Text below heading', blank=True,
+                                   help_text='Leave an empty line between paragraphs.')
     background_image = models.ImageField(
         'Background image', upload_to='cta/', blank=True, null=True,
         help_text='Wide landscape photo (at least 1920px wide). A dark overlay is added automatically.',
@@ -568,8 +589,10 @@ class CTASection(SingletonModel):
 class ContactSection(SingletonModel):
     section_label = models.CharField('Small heading', max_length=60, default='Contact')
     heading = models.CharField('Main heading', max_length=150, default='Tell us about your space')
+    subheading = models.CharField('Sub-heading', max_length=150, blank=True)
+    intro = models.CharField('Intro text', max_length=255, blank=True)
     description = models.CharField(
-        'Description', max_length=255,
+        'Response line', max_length=255,
         default='Share a few details and our team will get back within one working day.',
     )
 
@@ -585,6 +608,10 @@ class ContactSection(SingletonModel):
     )
 
     # Form texts
+    name_placeholder = models.CharField('Name field text', max_length=60, default='Name')
+    phone_placeholder = models.CharField('Phone field text', max_length=60, default='Phone')
+    email_placeholder = models.CharField('Email field text', max_length=60, default='Email')
+    message_placeholder = models.CharField('Message field text', max_length=120, default='Message')
     form_button_text = models.CharField('Form button text', max_length=40, default='Send Enquiry')
     service_placeholder = models.CharField('Service dropdown text', max_length=60, default='Service Required')
     success_message = models.CharField(
@@ -622,6 +649,48 @@ class ContactSection(SingletonModel):
     def map_url(self):
         from urllib.parse import quote_plus
         return f'https://www.google.com/maps/search/?api=1&query={quote_plus(self.address)}' if self.address else ''
+
+
+class EnquiryService(OrderedModel):
+    """One option in the form's 'Service required' dropdown."""
+    contact = models.ForeignKey(ContactSection, on_delete=models.CASCADE,
+                                related_name='services', default=1)
+    name = models.CharField('Service', max_length=100)
+
+    class Meta(OrderedModel.Meta):
+        verbose_name = 'Dropdown option'
+        verbose_name_plural = 'Service dropdown options'
+
+    def __str__(self):
+        return self.name
+
+
+# ------------------------------------------------------------------
+# FAQ (below the Contact section)
+# ------------------------------------------------------------------
+class FAQSection(SingletonModel):
+    section_label = models.CharField('Small heading', max_length=60, default='FAQ')
+    heading = models.CharField('Main heading', max_length=150, default='Frequently Asked Questions')
+
+    class Meta:
+        verbose_name = 'FAQ Section'
+        verbose_name_plural = 'FAQ Section'
+
+    def __str__(self):
+        return 'FAQ Section'
+
+
+class FAQItem(OrderedModel):
+    section = models.ForeignKey(FAQSection, on_delete=models.CASCADE, related_name='items', default=1)
+    question = models.CharField('Question', max_length=200)
+    answer = models.TextField('Answer')
+
+    class Meta(OrderedModel.Meta):
+        verbose_name = 'Question'
+        verbose_name_plural = 'Questions'
+
+    def __str__(self):
+        return self.question
 
 
 class Enquiry(models.Model):

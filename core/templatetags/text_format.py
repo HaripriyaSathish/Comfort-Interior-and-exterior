@@ -30,3 +30,9 @@ def rich_text(value):
         return ''
     paragraphs = re.split(r'\n\s*\n', escape(value).replace('\r\n', '\n').strip())
     return mark_safe(''.join(f'<p>{_inline(p).replace(chr(10), "<br>")}</p>' for p in paragraphs))
+
+
+@register.filter
+def email_break(value):
+    """Lets a long email wrap after the @ on small screens instead of mid-word."""
+    return mark_safe(escape(value).replace('@', '@<wbr>'))
